@@ -117,23 +117,6 @@ Our header is built using three segments.
     </div>
   </div>
 
-  {% if new_record %}
-  <div class="banner banner-status row _isNewRecord">
-    <span class="success">Success!</span>
-    <span class="message verbose">Your new Perma Link is <strong><a
-          href="https://{{ request.get_host }}{% url 'single_permalink' link.guid %}" id="perma-link-text">https://{{
-          request.get_host }}{% url 'single_permalink' link.guid }}</a><button class="copy-perma-link-btn"
-          title="Copy Perma Link" aria-label="Copy Perma Link"
-          data-perma-link="https://{{ request.get_host }}{% url 'single_permalink' link.guid %}"><span
-            class="icon-copy"></span></button></strong></span>
-    <span class="link-options verbose">
-      <a class="edit-link" style="cursor:pointer;">Edit<span class="_verbose _toDesktop"> link details</span></a>
-      <span class="_verbose _toDesktop"> (Perma Links are permanent after 24 hours)</span>
-    </span>
-    <a class="action new-link" href="{% url 'create_link' %}">Make a new Perma Link</a>
-  </div>
-  {% endif %}
-
   <div id="collapse-details" class="details-segment ui-tray row collapse">
     <div class="tray-details">
       <div class="tray-detail-group">
@@ -354,30 +337,5 @@ Our header is built using three segments.
   {% else %}
   {% render_bundle 'single-link' 'js' %}
   {% endif %}
-
-  <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', () => {
-      const copyButton = document.querySelector('.copy-perma-link-btn');
-      if (copyButton) {
-        copyButton.addEventListener('click', async () => {
-          const permaLink = copyButton.dataset.permaLink;
-          try {
-            await navigator.clipboard.writeText(permaLink);
-            if (window.globalStore && window.globalStore.addToast) {
-              window.globalStore.addToast('Perma link copied to clipboard!', 'success');
-            } else {
-              alert('Perma link copied to clipboard!');
-            }
-          } catch (err) {
-            if (window.globalStore && window.globalStore.addToast) {
-              window.globalStore.addToast('Failed to copy link', 'error');
-            } else {
-              alert('Failed to copy link');
-            }
-          }
-        });
-      }
-    });
-  </script>
 
   {% endblock %}
