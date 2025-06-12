@@ -307,6 +307,15 @@ defineExpose({
   fetchLinks
 });
 
+const copyToClipboard = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    globalStore.addToast('Perma link copied to clipboard!', 'success');
+  } catch (err) {
+    globalStore.addToast('Failed to copy link', 'error');
+  }
+};
+
 </script>
 
 <template>
@@ -392,6 +401,14 @@ defineExpose({
             </div>
             <div class="col col-sm-6 col-md-40 align-right item-permalink">
               <a v-if="link.delete_available" class="delete no-drag" :href="`/manage/delete-link/${link.guid}`">Delete</a>
+              <button 
+                class="copy-link no-drag" 
+                @click.stop.prevent="copyToClipboard(`https://${link.local_url}`)"
+                title="Copy Perma Link"
+                aria-label="Copy Perma Link"
+              >
+                <span class="icon-copy"></span>
+              </button>
               <a class="perma no-drag" :href="`//${link.local_url}`" target="_blank">{{ link.local_url }}</a>
             </div>
           </div>
@@ -510,5 +527,27 @@ defineExpose({
 <style scoped>
 .loading-enter-active {
   transition-delay: 2s;
+}
+
+.copy-link {
+  background: none;
+  border: none;
+  padding: 0 8px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.copy-link:hover {
+  color: #2672F2;
+}
+
+.copy-link .icon-copy {
+  font-size: 14px;
+}
+
+.copy-link:focus {
+  outline: none;
+  color: #2672F2;
 }
 </style>
